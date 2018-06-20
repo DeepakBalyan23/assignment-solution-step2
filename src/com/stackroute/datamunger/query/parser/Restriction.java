@@ -43,4 +43,11 @@ public class Restriction {
 		this.condition = condition;
 	}
 
+	@Override
+	public String toString() {
+		return this.name+this.condition+this.value;
+	}
+	
+	
+
 }

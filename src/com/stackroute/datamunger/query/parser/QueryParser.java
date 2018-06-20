@@ -42,6 +42,7 @@ public class QueryParser {
 		queryParameter.setFields(getFields(queryString));
 		queryParameter.setAggregateFunctions(getAggregateFunctions(queryString));
 		queryParameter.setLogicalOperators(getLogicalOperators(queryString));
+		queryParameter.setRestrictions(getRestrictions(queryString));
 		return queryParameter;
 	}
 
@@ -149,6 +150,51 @@ public class QueryParser {
 	 * Please consider this while parsing the conditions.
 	 * 
 	 */
+	
+	public List<Restriction> getRestrictions(String queryString) {
+		int indexOfGroupBy = queryString.indexOf(" group by ");
+		int indexOfOrderBy = queryString.indexOf(" order by ");
+		int indexOfWhere = queryString.indexOf(" where ");
+		if(indexOfWhere < 0) {
+			return null;
+		}
+		String conditionString = "";
+		if(indexOfGroupBy<0&&indexOfOrderBy<0) {
+			conditionString = queryString.substring(queryString.indexOf(" where ")).replace(" where ", "");
+		} else {
+			int lastIndex = queryString.length();
+			if(indexOfGroupBy<0) {
+				lastIndex = indexOfOrderBy;
+			} else if(indexOfOrderBy<0) {
+				lastIndex = indexOfGroupBy;
+			} else if(indexOfGroupBy>indexOfOrderBy) {
+				lastIndex = indexOfOrderBy;
+			} else {
+				lastIndex = indexOfGroupBy;
+			}
+			conditionString = queryString.substring(indexOfWhere, lastIndex).replace(" where ", "");
+		}
+		ArrayList<Restriction> list = new ArrayList<>();
+		for(String str: conditionString.split(" and | or ")) {
+			String condition = "";
+			if(str.contains(">=")) {
+				condition = ">=";
+			} else if(str.contains("<=")) {
+				condition = "<=";
+			} else if(str.contains(">")) {
+				condition = ">";
+			} else if(str.contains("<")) {
+				condition = "<";
+			} else if(str.contains("=")) {
+				condition = "=";
+			}
+			String name = str.split(condition)[0].trim();
+			String value = str.split(condition)[1].trim().replaceAll("'", "");
+			Restriction restrictionInstance = new Restriction(name, value, condition);
+			list.add(restrictionInstance);
+		}
+		return list;
+	}
 
 	/*
 	 * Extract the logical operators(AND/OR) from the query, if at all it is
@@ -161,6 +207,8 @@ public class QueryParser {
 	 */
 
 	public List<String> getLogicalOperators(String queryString) {
+		if(!queryString.toLowerCase().contains("where"))
+			return null;
 		ArrayList<String> operatorsArr = new ArrayList<>();
 		String arr[] = queryString.split(" ");
 		for(String str: arr) {

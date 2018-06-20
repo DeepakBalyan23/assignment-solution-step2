@@ -126,17 +126,14 @@ public class DataMungerTestTask3 {
 		assertNotNull(
 				"testGetLogicalOperatorsFailures() :  Retrieval of Logical Operators failed. AND/OR keyword will exist in the query only if where conditions exists and it contains multiple conditions.The extracted logical operators will be stored in a String array which will be returned by the method. Please note that AND/OR can exist as a substring in the conditions as well. For eg: name='Alexander',color='Red' etc",
 				logicalOperators);
-		System.out.println(logicalOperators + " x");
 
 		queryString = "select city,winner,team from ipl.csv where season > 2014";
 		queryParameter = queryParser.parseQuery(queryString);
 		logicalOperators.clear();
 		logicalOperators = queryParameter.getLogicalOperators();
-		System.out.println(logicalOperators + " y");
 		assertNotNull(
 				"testGetLogicalOperatorsFailures() :  Retrieval of Logical Operators failed. AND/OR keyword will exist in the query only if where conditions exists and it contains multiple conditions.The extracted logical operators will be stored in a String array which will be returned by the method. Please note that AND/OR can exist as a substring in the conditions as well. For eg: name='Alexander',color='Red' etc",
 				logicalOperators);
-		System.out.println(logicalOperators + " y");
 
 	}
 
