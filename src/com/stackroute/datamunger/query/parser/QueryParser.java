@@ -1,6 +1,7 @@
 package com.stackroute.datamunger.query.parser;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /*There are total 4 DataMungerTest file:
@@ -63,12 +64,12 @@ public class QueryParser {
 	 */
 	
 	private String getBaseQuery(String queryString) {
-		int i = queryString.indexOf(" where ");
-		if(i<0) {
+		int indexOfWhere = queryString.indexOf(" where ");
+		if(indexOfWhere<0) {
 			return queryString.split(" group by | order by ")[0];
 		}		
 		else {
-			return queryString.substring(0, i);
+			return queryString.substring(0, indexOfWhere);
 		}
 			
 	}
@@ -82,12 +83,12 @@ public class QueryParser {
 	 */
 
 	public List<String> getOrderByFields(String queryString) {
-		int j = queryString.indexOf(" order by ");
-		if(j<0)
+		int indexOfOrderBy = queryString.indexOf(" order by ");
+		if(indexOfOrderBy<0)
 			return null;
 		else {
-			String str = queryString.substring(j).replace(" order by ", "");
-			return Arrays.asList(str.split(" ,"));
+			String str = queryString.split(" order by ")[1].split(" ")[0];
+			return new LinkedList<String>(Arrays.asList(str.split(" ,")));
 		}
 	}
 	
@@ -100,12 +101,12 @@ public class QueryParser {
 	 */
 	
 	public List<String> getGroupByFields(String queryString) {
-		int j = queryString.indexOf(" group by ");
-		if(j<0)
+		int indexOfGroupBy = queryString.indexOf(" group by ");
+		if(indexOfGroupBy<0)
 			return null;
 		else {
-			String str = queryString.substring(j).replace(" group by ", "");
-			return Arrays.asList(str.split(" ,"));
+			String str = queryString.split(" group by ")[1].split(" ")[0];
+			return new LinkedList<String>(Arrays.asList(str.split(" ,")));
 		}
 	}
 
