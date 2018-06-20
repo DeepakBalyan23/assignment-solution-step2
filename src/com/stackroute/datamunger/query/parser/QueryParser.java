@@ -41,6 +41,7 @@ public class QueryParser {
 		queryParameter.setGroupByFields(getGroupByFields(queryString));
 		queryParameter.setFields(getFields(queryString));
 		queryParameter.setAggregateFunctions(getAggregateFunctions(queryString));
+		queryParameter.setLogicalOperators(getLogicalOperators(queryString));
 		return queryParameter;
 	}
 
@@ -159,6 +160,18 @@ public class QueryParser {
 	 * containing [or,and]
 	 */
 
+	public List<String> getLogicalOperators(String queryString) {
+		ArrayList<String> operatorsArr = new ArrayList<>();
+		String arr[] = queryString.split(" ");
+		for(String str: arr) {
+			if(str.equals("and"))
+				operatorsArr.add("and");
+			else if(str.equals("or"))
+				operatorsArr.add("or");
+		}
+		return operatorsArr;
+	}
+	
 	/*
 	 * Extract the aggregate functions from the query. The presence of the aggregate
 	 * functions can determined if we have either "min" or "max" or "sum" or "count"
