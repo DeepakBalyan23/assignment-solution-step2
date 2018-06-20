@@ -32,4 +32,9 @@ public class AggregateFunction {
 		this.function = function;
 	}
 
+	@Override
+	public String toString() {
+		return this.field+this.function;
+	}
+
 }

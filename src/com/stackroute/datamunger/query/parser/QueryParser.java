@@ -1,5 +1,6 @@
 package com.stackroute.datamunger.query.parser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,6 +39,8 @@ public class QueryParser {
 		queryParameter.setFileName(getFileName(queryString));
 		queryParameter.setOrderByFields(getOrderByFields(queryString));
 		queryParameter.setGroupByFields(getGroupByFields(queryString));
+		queryParameter.setFields(getFields(queryString));
+		queryParameter.setAggregateFunctions(getAggregateFunctions(queryString));
 		return queryParameter;
 	}
 
@@ -118,6 +121,18 @@ public class QueryParser {
 	 * note that we might have a field containing name "from_date" or "from_hrs".
 	 * Hence, consider this while parsing.
 	 */
+	
+	public List<String> getFields(String queryString) {
+		String arr[] = queryString.toLowerCase().split(" ");
+		String fields = "";
+		for(int i=0; i<arr.length;i++) {
+			if(arr[i].equals("select")) {
+				fields = arr[i+1];
+				break;
+			}
+		}
+		return new LinkedList<String>(Arrays.asList(fields.split(",")));
+	}
 
 	/*
 	 * Extract the conditions from the query string(if exists). for each condition,
@@ -157,5 +172,31 @@ public class QueryParser {
 	 * 
 	 * 
 	 */
+	
+	public List<AggregateFunction> getAggregateFunctions(String queryString) {
+		String splitstrings[] = queryString.split(" ");
+		ArrayList<String> aggFunctions = new ArrayList<String>();
+		for(String string: splitstrings) {
+			if(string.contains("sum(")||string.contains("count(")||string.contains("min(")||string.contains("max(")||string.contains("avg(")) {
+				aggFunctions = new ArrayList<String>(Arrays.asList(string.split(",")));
+			}
+		}
+		if(aggFunctions.size() == 0)
+			return null;
+		else {
+			ArrayList<AggregateFunction> functionList = new ArrayList<AggregateFunction>();
+			for(String aggFun: aggFunctions) {
+				if(!aggFun.contains("(")) {
+					continue;
+				} else {
+					String field = aggFun.trim().split("\\(")[1].replace(")", "");
+					String function = aggFun.trim().split("\\(")[0];
+					AggregateFunction fun = new AggregateFunction(field, function);
+					functionList.add(fun);
+				}
+			}
+			return functionList;
+		}
+	}
 
 }
