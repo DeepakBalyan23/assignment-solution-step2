@@ -1,5 +1,8 @@
 package com.stackroute.datamunger.query.parser;
 
+import java.util.Arrays;
+import java.util.List;
+
 /*There are total 4 DataMungerTest file:
  * 
  * 1)DataMungerTestTask1.java file is for testing following 4 methods
@@ -30,7 +33,10 @@ public class QueryParser {
 	 * QueryParameter class
 	 */
 	public QueryParameter parseQuery(String queryString) {
-
+		queryParameter.setBaseQuery(getBaseQuery(queryString));
+		queryParameter.setFileName(getFileName(queryString));
+		queryParameter.setOrderByFields(getOrderByFields(queryString));
+		queryParameter.setGroupByFields(getGroupByFields(queryString));
 		return queryParameter;
 	}
 
@@ -38,6 +44,16 @@ public class QueryParser {
 	 * Extract the name of the file from the query. File name can be found after the
 	 * "from" clause.
 	 */
+	
+	private String getFileName(String queryString) {
+		String arr[] = queryString.toLowerCase().split(" ");
+		for(int i=0; i<arr.length;i++) {
+			if(arr[i].equals("from")) {
+				return arr[i+1];
+			}
+		}
+		return null;
+	}
 
 	/*
 	 * 
@@ -45,6 +61,17 @@ public class QueryParser {
 	 * baseQuery from the query string. BaseQuery contains from the beginning of the
 	 * query till the where clause
 	 */
+	
+	private String getBaseQuery(String queryString) {
+		int i = queryString.indexOf(" where ");
+		if(i<0) {
+			return queryString.split(" group by | order by ")[0];
+		}		
+		else {
+			return queryString.substring(0, i);
+		}
+			
+	}
 
 	/*
 	 * extract the order by fields from the query string. Please note that we will
@@ -54,6 +81,16 @@ public class QueryParser {
 	 * "city". Please note that we can have more than one order by fields.
 	 */
 
+	public List<String> getOrderByFields(String queryString) {
+		int j = queryString.indexOf(" order by ");
+		if(j<0)
+			return null;
+		else {
+			String str = queryString.substring(j).replace(" order by ", "");
+			return Arrays.asList(str.split(" ,"));
+		}
+	}
+	
 	/*
 	 * Extract the group by fields from the query string. Please note that we will
 	 * need to extract the field(s) after "group by" clause in the query, if at all
@@ -61,6 +98,16 @@ public class QueryParser {
 	 * data/ipl.csv group by city from the query mentioned above, we need to extract
 	 * "city". Please note that we can have more than one group by fields.
 	 */
+	
+	public List<String> getGroupByFields(String queryString) {
+		int j = queryString.indexOf(" group by ");
+		if(j<0)
+			return null;
+		else {
+			String str = queryString.substring(j).replace(" group by ", "");
+			return Arrays.asList(str.split(" ,"));
+		}
+	}
 
 	/*
 	 * Extract the selected fields from the query string. Please note that we will

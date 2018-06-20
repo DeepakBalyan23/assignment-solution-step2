@@ -9,36 +9,93 @@ import java.util.List;
  * */
 
 public class QueryParameter {
-
+	private String fileName;
+	private String baseQuery;
+	private List<Restriction> restrictions;
+	private List<String> logicalOperators;
+	private List<String> fields;
+	private List<AggregateFunction> aggregateFunctions;
+	private List<String> groupByFields;
+	private List<String> orderByFields;
+	private String querryString;
+	private String querryType;
+	
 	public String getFileName() {
-		return null;
+		return fileName;
 	}
-
+	
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	
 	public String getBaseQuery() {
-		return null;
+		return baseQuery;
 	}
-
+	
+	public void setBaseQuery(String baseQuery) {
+		this.baseQuery = baseQuery;
+	}
 	public List<Restriction> getRestrictions() {
-		return null;
+		return restrictions;
 	}
-
+	
+	public void setRestrictions(List<Restriction> restrictions) {
+		this.restrictions = restrictions;
+	}
+	
 	public List<String> getLogicalOperators() {
-		return null;
+		return logicalOperators;
 	}
-
+	
+	public void setLogicalOperators(List<String> logicalOperators) {
+		this.logicalOperators = logicalOperators;
+	}
+	
 	public List<String> getFields() {
-		return null;
+		return fields;
 	}
-
+	
+	public void setFields(List<String> fields) {
+		this.fields = fields;
+	}
+	
 	public List<AggregateFunction> getAggregateFunctions() {
-		return null;
+		return aggregateFunctions;
 	}
-
+	
+	public void setAggregateFunctions(List<AggregateFunction> aggregateFunctions) {
+		this.aggregateFunctions = aggregateFunctions;
+	}
+	
 	public List<String> getGroupByFields() {
-		return null;
+		return groupByFields;
 	}
-
+	
+	public void setGroupByFields(List<String> groupByFields) {
+		this.groupByFields = groupByFields;
+	}
+	
 	public List<String> getOrderByFields() {
-		return null;
+		return orderByFields;
+	}
+	
+	public void setOrderByFields(List<String> orderByFields) {
+		this.orderByFields = orderByFields;
+	}
+	
+	public String getQuerryString() {
+		return querryString;
+	}
+	
+	public void setQuerryString(String querryString) {
+		this.querryString = querryString;
+	}
+	
+	public String getQuerryType() {
+		return querryType;
+	}
+	
+	public void setQuerryType(String querryType) {
+		this.querryType = querryType;
 	}
 }
